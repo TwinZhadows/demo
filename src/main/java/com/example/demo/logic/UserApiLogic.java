@@ -74,6 +74,6 @@ public class UserApiLogic {
             throw UserException.loginFailedLoginIncorrect();
         }
         //TODO return jwt
-        return "logiin success";
+        return "login success";
     }
 }
