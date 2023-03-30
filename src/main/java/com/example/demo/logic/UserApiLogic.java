@@ -8,6 +8,7 @@ import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.LoginRequest;
 import com.example.demo.model.RegisterRequest;
 import com.example.demo.model.RegisterResponse;
+import com.example.demo.service.TokenService;
 import com.example.demo.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,10 +26,12 @@ public class UserApiLogic {
     private final UserService userService;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
-     public UserApiLogic(UserService userService, UserMapper mapper, PasswordEncoder passwordEncoder){
+    private final TokenService tokenService;
+     public UserApiLogic(UserService userService, UserMapper mapper, PasswordEncoder passwordEncoder, TokenService tokenService){
          this.userService = userService;
          this.mapper = mapper;
          this.passwordEncoder = passwordEncoder;
+         this.tokenService = tokenService;
      }
     public RegisterResponse register(RegisterRequest request) throws UserException {
         User user = userService.create(request.getEmail(), request.getPass(), request.getName());
@@ -74,6 +77,7 @@ public class UserApiLogic {
             throw UserException.loginFailedLoginIncorrect();
         }
         //TODO return jwt
-        return "login success";
+
+        return tokenService.tokenize(user);
     }
 }
