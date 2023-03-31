@@ -16,6 +16,7 @@ public class TokenConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFi
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        //create filter object for token and map to UsernamePasswordAuthenticationFilter
         TokenFilter filter = new TokenFilter(tokenService);
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }

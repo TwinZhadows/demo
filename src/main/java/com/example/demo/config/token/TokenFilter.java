@@ -29,6 +29,8 @@ public class TokenFilter extends GenericFilter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        //Analyze if token is valid, get token data, and authenticate if valid
+
         //check if request to backend has token
 
         //check for Authorization header

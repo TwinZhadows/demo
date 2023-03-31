@@ -1,4 +1,15 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: cocosmile.chon
+    password: oqflnefctbkugdzz
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+              enable: true
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,4 +27,5 @@ app:
    token:
      secret: mysecret
      issuer: BackEndService
+
 

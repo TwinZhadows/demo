@@ -15,7 +15,7 @@ import java.util.Date;
 
 @Service
 public class TokenService {
-
+    //create and verify token
     @Value("${app.token.secret}")
     private String secret;
     @Value("${app.token.issuer}")
