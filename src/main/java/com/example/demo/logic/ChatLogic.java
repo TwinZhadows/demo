@@ -22,7 +22,7 @@ public class ChatLogic {
 
 
     public void post(ChatMessageRequest request) throws ChatException {
-        final String destination = "chat"; //backend communicate via "chat" channel
+        final String destination = "/topic/chat"; //backend communicate via "chat" channel to frontend
         Optional<String> opt = SecurityUtil.getCurrentUserId();
         if(opt.isEmpty()){
             throw ChatException.accessDenied();

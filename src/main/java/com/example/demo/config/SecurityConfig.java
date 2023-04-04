@@ -1,7 +1,6 @@
 package com.example.demo.config;
 
 import com.example.demo.config.token.TokenConfigurer;
-import com.example.demo.config.token.TokenFilter;
 import com.example.demo.service.TokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,12 +14,14 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
+
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     private final String[] PUBLIC = {
-            "/actuator/**", "/test/register", "/test/login", "/socket/**"
+            "/actuator/**", "/test/register", "/test/login", "/socket/**", "/chat/**"
     };
 
     private final TokenService tokenService;
@@ -41,11 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().disable().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-
-        .and().authorizeRequests().antMatchers("/test/register", "/test/login").anonymous().
-                anyRequest().authenticated()
-
                 .and().authorizeRequests().antMatchers(PUBLIC).anonymous()
                 .anyRequest().authenticated()
                 .and().apply(new TokenConfigurer(tokenService));
@@ -60,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
 
-        config.addAllowedOrigin("http://localhost:4200");
+        config.setAllowedOriginPatterns(Arrays.asList("http://localhost:4200"));
 
         config.addAllowedHeader("*");
         config.addAllowedMethod("OPTIONS");

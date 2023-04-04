@@ -22,7 +22,6 @@ public class ChatApi {
     }
 
     @PostMapping("/message")
-
     public ResponseEntity<Void> post(@RequestBody ChatMessageRequest request) throws ChatException {
         chatLogic.post(request);
         return ResponseEntity.status(HttpStatus.OK).build();
