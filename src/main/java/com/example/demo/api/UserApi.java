@@ -2,6 +2,7 @@ package com.example.demo.api;
 
 import com.example.demo.Entity.User;
 import com.example.demo.exception.BaseException;
+import com.example.demo.exception.EmailException;
 import com.example.demo.exception.FileException;
 import com.example.demo.exception.UserException;
 import com.example.demo.logic.UserApiLogic;
@@ -35,7 +36,7 @@ public class UserApi {
 		return response;
 	}
 	@PostMapping("/register")
-	public ResponseEntity<RegisterResponse>  register(@RequestBody RegisterRequest request) throws UserException {
+	public ResponseEntity<RegisterResponse>  register(@RequestBody RegisterRequest request) throws UserException, EmailException {
 
 		RegisterResponse response = logic.register(request);
 		return ResponseEntity.ok(response);

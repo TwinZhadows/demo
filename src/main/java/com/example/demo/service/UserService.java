@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.Entity.User;
+import com.example.demo.exception.EmailException;
 import com.example.demo.exception.UserException;
 import com.example.demo.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
