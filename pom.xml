@@ -94,9 +94,7 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>5.7.7</version>
 		</dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-websocket</artifactId>
-		</dependencies>
+	</dependencies>
 
 
 	<build>
