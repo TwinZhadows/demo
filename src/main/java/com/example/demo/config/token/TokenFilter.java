@@ -1,9 +1,7 @@
 package com.example.demo.config.token;
 
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.service.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,7 +12,6 @@ import org.springframework.util.ObjectUtils;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +62,6 @@ public class TokenFilter extends GenericFilter {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(principal, "(protected)", authorities);
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(authentication);
-
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }

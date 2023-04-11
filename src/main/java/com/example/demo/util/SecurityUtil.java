@@ -32,7 +32,5 @@ public class SecurityUtil {
         return Optional.of(userId);
     }
 
-
-
 }
 

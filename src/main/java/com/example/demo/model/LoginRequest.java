@@ -6,7 +6,7 @@ import lombok.Data;
 public class LoginRequest
 {
     private String email;
-    private String pass;
+    private String password;
 
 }
 

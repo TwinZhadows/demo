@@ -7,6 +7,7 @@ import com.example.demo.exception.FileException;
 import com.example.demo.exception.UserException;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.LoginRequest;
+import com.example.demo.model.LoginResponse;
 import com.example.demo.model.RegisterRequest;
 import com.example.demo.model.RegisterResponse;
 import com.example.demo.service.TokenService;
@@ -37,7 +38,7 @@ public class UserApiLogic {
          this.tokenService = tokenService;
      }
     public RegisterResponse register(RegisterRequest request) throws UserException, EmailException {
-        User user = userService.create(request.getEmail(), request.getPass(), request.getName());
+        User user = userService.create(request.getEmail(), request.getPassword(), request.getName());
         emailLogic.sendActivateUserEmail(request.getEmail(), request.getName(), "TestTken!@#!@ASDASD");
         return mapper.toRegisterResponse(user);
     }
@@ -67,20 +68,21 @@ public class UserApiLogic {
         return "uploaded";
     }
 
-    public String login(LoginRequest request)throws BaseException {
+    public LoginResponse login(LoginRequest request) throws BaseException {
         //validate request
         //verify db
         Optional<User> opt = userService.findByEmail(request.getEmail());
 
-        if(opt.isEmpty()){
+        if (opt.isEmpty()) {
             throw UserException.loginFailedEmailNotFound();
         }
         User user = opt.get();
-        if(!userService.matchPassword(request.getPass(), user.getPassword() )){
+        if (!userService.matchPassword(request.getPassword(), user.getPassword())) {
             throw UserException.loginFailedLoginIncorrect();
         }
         //TODO return jwt
-
-        return tokenService.tokenize(user);
+        LoginResponse response = new LoginResponse();
+        response.setToken(tokenService.tokenize(user));
+        return response;
     }
 }
