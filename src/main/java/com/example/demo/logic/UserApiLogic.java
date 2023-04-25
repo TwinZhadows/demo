@@ -12,6 +12,8 @@ import com.example.demo.model.RegisterRequest;
 import com.example.demo.model.RegisterResponse;
 import com.example.demo.service.TokenService;
 import com.example.demo.service.UserService;
+import com.example.demo.util.SecurityUtil;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,37 +23,48 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-
+@Log4j2
 @Service
 public class UserApiLogic {
-
     private final UserService userService;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
     private final EmailLogic emailLogic;
     private final TokenService tokenService;
      public UserApiLogic(UserService userService, UserMapper mapper, PasswordEncoder passwordEncoder, EmailLogic emailLogic, TokenService tokenService){
+
          this.userService = userService;
          this.mapper = mapper;
          this.passwordEncoder = passwordEncoder;
          this.emailLogic = emailLogic;
          this.tokenService = tokenService;
+
      }
+
     public RegisterResponse register(RegisterRequest request) throws UserException, EmailException {
-        User user = userService.create(request.getEmail(), request.getPassword(), request.getName());
-        emailLogic.sendActivateUserEmail(request.getEmail(), request.getName(), "TestTken!@#!@ASDASD");
+        String token = SecurityUtil.generateToken();
+        User user = userService.create(request.getEmail(), request.getPassword(), request.getName(), token);
+        sendEmail(user);
         return mapper.toRegisterResponse(user);
     }
 
-    public String uploadProfilePicture(MultipartFile file)throws FileException{
-        if(file == null){
+    private void sendEmail(User user) throws EmailException {
+
+        String token = user.getActivateToken();
+        emailLogic.sendActivateUserEmail(user.getEmail(), user.getName(), token);
+        //emailLogic.sendActivateUserEmail(request.getEmail(), request.getName(), "TestTken!@#!@ASDASD");
+
+    }
+
+    public String uploadProfilePicture(MultipartFile file) throws FileException {
+        if (file == null) {
             throw FileException.fileNull();
         }
-        if(file.getSize()>1048576*2){
+        if (file.getSize() > 1048576 * 2) {
             throw FileException.maxFileSize();
         }
         String contentType = file.getContentType();
-        if(contentType == null){
+        if (contentType == null) {
             throw FileException.fileNull();
         }
         List<String> supportedTypes = Arrays.asList("image/jpeg","image/png");

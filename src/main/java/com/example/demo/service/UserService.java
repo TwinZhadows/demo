@@ -1,13 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.Entity.User;
-import com.example.demo.exception.EmailException;
 import com.example.demo.exception.UserException;
 import com.example.demo.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -22,30 +22,38 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User create(String email, String password, String name) throws UserException {
+    public User create(String email, String password, String name, String token) throws UserException {
 
-        if(Objects.isNull(email)){
+        if (Objects.isNull(email)) {
             throw UserException.createEmailNull();
         }
-        if(Objects.isNull(name)){
+        if (Objects.isNull(name)) {
             throw UserException.createNameNull();
         }
-        if(Objects.isNull(password)){
+        if (Objects.isNull(password)) {
             throw UserException.createPasswordNull();
         }
         User entity = new User();
         entity.setEmail(email);
         entity.setName(name);
         entity.setPassword(passwordEncoder.encode(password));
-
+        entity.setActivateToken(token);
+        entity.setTokenExpire(setTokenExpireDate());
         return repository.save(entity);
     }
 
-    public Optional<User> findByEmail(String email){
+    private Date setTokenExpireDate() {
+        //token expire in 30 mins
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(calendar.MINUTE, 30);
+        return calendar.getTime();
+    }
+
+    public Optional<User> findByEmail(String email) {
         return repository.findByEmail(email);
     }
 
-    public boolean matchPassword(String rawPassword, String encodedPassword){
+    public boolean matchPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 

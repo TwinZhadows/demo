@@ -1,4 +1,10 @@
+server:
+  port: 8080
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: "my-awesome-app"
   mail:
     host: smtp.gmail.com
     port: 587
@@ -9,12 +15,12 @@ spring:
         smtp:
           auth: true
           starttls:
-              enable: true
+            enable: true
   jpa:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:32768/backend
+    url: jdbc:postgresql://localhost:5432/backend
     username: postgres
     password: postgrespw
   servlet:
@@ -24,8 +30,8 @@ spring:
       max-request-size: 5MB
 
 app:
-   token:
-     secret: mysecret
-     issuer: BackEndService
+  token:
+    secret: mysecret
+    issuer: BackEndService
 
 

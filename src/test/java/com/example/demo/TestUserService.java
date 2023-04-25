@@ -7,9 +7,8 @@ import com.example.demo.exception.UserException;
 import com.example.demo.service.AddressService;
 import com.example.demo.service.SocialService;
 import com.example.demo.service.UserService;
-import com.sun.jdi.request.StepRequest;
+import com.example.demo.util.SecurityUtil;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -32,10 +31,12 @@ public class TestUserService {
     @Order(1)
     @Test
     void testCreate() throws UserException {
+        String token = SecurityUtil.generateToken();
         User user = userService.create(
                 TestData.email,
                 TestData.password,
-                TestData.name
+                TestData.name,
+                token
         );
         //not null
         Assertions.assertNotNull(user);
