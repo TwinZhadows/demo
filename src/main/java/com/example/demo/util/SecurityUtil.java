@@ -37,6 +37,7 @@ public class SecurityUtil {
         return Optional.of(userId);
     }
 
+    //generate Token for registered user for account activation
     public static String generateToken() {
         List<CharacterRule> rules = Arrays.asList(
                 // at least one upper-case character

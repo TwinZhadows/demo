@@ -24,6 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/actuator/**",
             "/test/register",
             "/test/login",
+            "/test/activate",
+            "/test/reactivate",
             "/socket/**"
     };
 

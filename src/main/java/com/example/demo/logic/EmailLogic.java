@@ -42,6 +42,7 @@ public class EmailLogic {
 
         EmailRequest request = new EmailRequest();
         request.setTo(email);
+        request.setSubject(subject);
         request.setContent(html);
 
         ListenableFuture<SendResult<String, EmailRequest>> future = kafkaEmailTemplate.send("activation-email", request);

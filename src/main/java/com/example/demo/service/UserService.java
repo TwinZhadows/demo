@@ -6,7 +6,6 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,7 +21,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User create(String email, String password, String name, String token) throws UserException {
+    public User create(String email, String password, String name, String token, Date tokenExpireDate) throws UserException {
 
         if (Objects.isNull(email)) {
             throw UserException.createEmailNull();
@@ -38,17 +37,9 @@ public class UserService {
         entity.setName(name);
         entity.setPassword(passwordEncoder.encode(password));
         entity.setActivateToken(token);
-        entity.setTokenExpire(setTokenExpireDate());
+        entity.setTokenExpire(tokenExpireDate);
         return repository.save(entity);
     }
-
-    private Date setTokenExpireDate() {
-        //token expire in 30 mins
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(calendar.MINUTE, 30);
-        return calendar.getTime();
-    }
-
     public Optional<User> findByEmail(String email) {
         return repository.findByEmail(email);
     }
@@ -67,7 +58,15 @@ public class UserService {
         return repository.save(user);
     }
 
-    public void deleteById(String id){
+    public void deleteById(String id) {
         repository.deleteById(id);
+    }
+
+    public Optional<User> findByActivateToken(String token) {
+        return repository.findByActivateToken(token);
+    }
+
+    public User update(User user) {
+        return repository.save(user);
     }
 }

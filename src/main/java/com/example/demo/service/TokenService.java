@@ -24,7 +24,7 @@ public class TokenService {
         String token ="";
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 60);
+        calendar.add(Calendar.MINUTE, 60); //expire in 60 minutes
         Date expire = calendar.getTime();
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
