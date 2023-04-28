@@ -3,13 +3,17 @@ package com.example.demo.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import java.io.Serializable;
 
 //Many to One example
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity(name = "m_address")
-public class Address extends BaseEntity {
+public class Address extends BaseEntity implements Serializable {//implement Serializable for caching
 
     @Column(length = 120)
     private String line1;

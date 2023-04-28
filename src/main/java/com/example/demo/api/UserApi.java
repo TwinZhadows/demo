@@ -38,6 +38,18 @@ public class UserApi {
 		return ResponseEntity.ok(response);
 	}
 
+	@GetMapping("/profile")
+	public ResponseEntity<UserProfile> getUserProfile() throws BaseException {
+		UserProfile response = logic.getUserProfile();
+		return ResponseEntity.ok(response);
+	}
+
+	@PutMapping("/profile")
+	public ResponseEntity<UserProfile> updateUserProfile(@RequestBody UpdateUserProfileRequest request) throws BaseException {
+		UserProfile response = logic.updateUserProfile(request);
+		return ResponseEntity.ok(response);
+	}
+
 	@PostMapping("/activate")
 	public ResponseEntity<ActivateResponse> activateUser(@RequestBody ActivateRequest request) throws BaseException {
 		ActivateResponse response = logic.activate(request);
@@ -49,4 +61,16 @@ public class UserApi {
 		logic.reactivate(request);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
+
+	@GetMapping("/refresh-token")
+	public ResponseEntity<String> refreshToken() throws BaseException {
+		String response = logic.refreshToken();
+		return ResponseEntity.ok(response);
+	}
+
+//	@DeleteMapping("/delete")
+//	public ResponseEntity<Void> deleteMyAccount() throws UserException {
+//		logic.deleteMyAccount();
+//		return ResponseEntity.ok().build();
+//	}
 }

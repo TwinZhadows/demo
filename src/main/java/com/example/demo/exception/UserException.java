@@ -6,6 +6,15 @@ public class UserException extends BaseException {
         super("user." + code);
     }
 
+    public static UserException unauthorized() {
+        return new UserException("unauthorized");
+    }
+
+    //Repository Update
+    public static UserException updateNameNull() {
+        return new UserException("update.name.null");
+    }
+
     //Register
     public static UserException requestNull() {
         return new UserException("register.request.null");
