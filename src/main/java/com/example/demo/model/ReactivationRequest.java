@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReactivationRequest {
-    private String email;
+    private String token;
 
 }
 

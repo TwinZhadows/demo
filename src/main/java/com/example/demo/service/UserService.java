@@ -61,6 +61,7 @@ public class UserService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
+    @CachePut(value = "user", key = "#id") //update cache if user record is updated
     public User updateName(String id, String name) throws UserException {
         Optional<User> opt = repository.findById(id);
         if (opt.isEmpty()) {
@@ -85,7 +86,7 @@ public class UserService {
         return repository.findByActivateToken(token);
     }
 
-    @CachePut(value = "user", key = "#id") //update cache if user record is updated
+
     public User update(User user) {
         return repository.save(user);
     }

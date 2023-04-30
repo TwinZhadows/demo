@@ -3,7 +3,7 @@ package com.example.demo.exception;
 public class UserException extends BaseException {
 
     public UserException(String code) {
-        super("user." + code);
+        super(code);
     }
 
     public static UserException unauthorized() {
@@ -61,7 +61,7 @@ public class UserException extends BaseException {
     }
 
     public static UserException tokenExpire() {
-        return new UserException("activation.user.token.expired");
+        return new UserException("activation.token.expired");
     }
 
     public static UserException noActivation() {
@@ -69,16 +69,16 @@ public class UserException extends BaseException {
     }
 
     //Reactivation
-    public static UserException nullEmail() {
-        return new UserException("reactivation.null.email");
+    public static UserException nullToken() {
+        return new UserException("reactivation.null.token");
     }
 
-    public static UserException emailNotFound() {
-        return new UserException("reactivation.email.not.Found");
+    public static UserException tokenNotFound() {
+        return new UserException("reactivation.token.not.Found");
     }
 
     public static UserException alreadyActivated() {
-        return new UserException("reactivation.already");
+        return new UserException("user.activation.already");
     }
 
 }

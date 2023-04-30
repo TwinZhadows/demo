@@ -133,22 +133,21 @@ public class UserApiLogic {
 
     public void reactivate(ReactivationRequest request) throws BaseException {
         //resend activation email
-        String email = request.getEmail();
-        if (StringUtil.isNullOrEmpty(email)) {
-            throw UserException.nullEmail();
+        String token = request.getToken();
+        if (StringUtil.isNullOrEmpty(token)) {
+            throw UserException.nullToken();
         }
-        Optional<User> opt = userService.findByEmail(email);
+        Optional<User> opt = userService.findByActivateToken(token);
         if (opt.isEmpty()) {
-            throw UserException.emailNotFound();
+            throw UserException.tokenNotFound();
         }
         User user = opt.get();
         //if user already activated
         if (user.isActivated()) {
             throw UserException.alreadyActivated();
         }
-        String token = SecurityUtil.generateToken();
         Date expireDate = setTokenExpireDate();
-        user.setActivateToken(token);
+        user.setActivateToken(SecurityUtil.generateToken());
         user.setTokenExpire(expireDate);
         userService.update(user);
         sendEmail(user);
@@ -166,7 +165,6 @@ public class UserApiLogic {
         if (opt.isEmpty()) {
             throw UserException.unauthorized();
         }
-
         String userId = opt.get();
 
         // validate
