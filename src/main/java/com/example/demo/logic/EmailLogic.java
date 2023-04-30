@@ -30,7 +30,7 @@ public class EmailLogic {
         //prepare content html
         String subject = "";
         String html = null;
-        String finalLink = "http://localhost:8080/activate/" + token;
+        String finalLink = "http://localhost:4200/activate/" + token;
         try {
             html = readEmailTemplate("email-activate-user.html");
         } catch (IOException e) {

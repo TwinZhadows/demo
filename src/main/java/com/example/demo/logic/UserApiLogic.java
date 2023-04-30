@@ -14,6 +14,7 @@ import io.netty.util.internal.StringUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -27,15 +28,18 @@ public class UserApiLogic {
     private final PasswordEncoder passwordEncoder;
     private final EmailLogic emailLogic;
     private final TokenService tokenService;
-     public UserApiLogic(UserService userService, UserMapper mapper, PasswordEncoder passwordEncoder, EmailLogic emailLogic, TokenService tokenService){
+    private final UserMapper userMapper;
 
-         this.userService = userService;
-         this.mapper = mapper;
-         this.passwordEncoder = passwordEncoder;
-         this.emailLogic = emailLogic;
-         this.tokenService = tokenService;
+    public UserApiLogic(UserService userService, UserMapper mapper, PasswordEncoder passwordEncoder, EmailLogic emailLogic, TokenService tokenService, UserMapper userMapper) {
 
-     }
+        this.userService = userService;
+        this.mapper = mapper;
+        this.passwordEncoder = passwordEncoder;
+        this.emailLogic = emailLogic;
+        this.tokenService = tokenService;
+
+        this.userMapper = userMapper;
+    }
 
     public RegisterResponse register(RegisterRequest request) throws UserException, EmailException {
         String token = SecurityUtil.generateToken();
@@ -63,8 +67,8 @@ public class UserApiLogic {
         if (contentType == null) {
             throw FileException.fileNull();
         }
-        List<String> supportedTypes = Arrays.asList("image/jpeg","image/png");
-        if(!supportedTypes.contains(contentType)){
+        List<String> supportedTypes = Arrays.asList("image/jpeg", "image/png");
+        if (!supportedTypes.contains(contentType)) {
             throw FileException.unsupportedFileType();
         }
 
@@ -157,4 +161,52 @@ public class UserApiLogic {
         return calendar.getTime();
     }
 
+    public UserProfile updateUserProfile(UpdateUserProfileRequest request) throws UserException {
+        Optional<String> opt = SecurityUtil.getCurrentUserId();
+        if (opt.isEmpty()) {
+            throw UserException.unauthorized();
+        }
+
+        String userId = opt.get();
+
+        // validate
+        if (ObjectUtils.isEmpty(request.getName())) {
+            throw UserException.updateNameNull();
+        }
+
+        User user = userService.updateName(userId, request.getName());
+        return userMapper.toUserProfile(user);
+    }
+
+    public UserProfile getUserProfile() throws UserException {
+        Optional<String> opt = SecurityUtil.getCurrentUserId();
+        if (opt.isEmpty()) {
+            throw UserException.unauthorized();
+        }
+
+        String userId = opt.get();
+
+        Optional<User> optUser = userService.findById(userId);
+        if (optUser.isEmpty()) {
+            throw UserException.notFound();
+        }
+        return userMapper.toUserProfile(optUser.get());
+    }
+
+    public String refreshToken() throws BaseException {
+        Optional<String> opt = SecurityUtil.getCurrentUserId();
+        if (opt.isEmpty()) {
+            throw UserException.unauthorized();
+        }
+
+        String userId = opt.get();
+
+        Optional<User> optUser = userService.findById(userId);
+        if (optUser.isEmpty()) {
+            throw UserException.notFound();
+        }
+
+        User user = optUser.get();
+        return tokenService.tokenize(user);
+    }
 }
