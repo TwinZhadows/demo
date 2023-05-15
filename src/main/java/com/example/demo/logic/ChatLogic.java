@@ -35,6 +35,7 @@ public class ChatLogic {
         payload.setFrom(opt.get());
         payload.setMessage(request.getMessage());
         System.out.println(opt.get());
+        //post message to channel
         template.convertAndSend(destination, payload);
     }
 

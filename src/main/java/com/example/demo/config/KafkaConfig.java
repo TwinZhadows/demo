@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.common.EmailRequest;
+import com.example.common.EmailRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;

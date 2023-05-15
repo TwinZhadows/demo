@@ -49,7 +49,7 @@ public class UserApiLogic {
     }
 
     private void sendEmail(User user) throws EmailException {
-
+        //send Activation email
         String token = user.getActivateToken();
         emailLogic.sendActivateUserEmail(user.getEmail(), user.getName(), token);
         //emailLogic.sendActivateUserEmail(request.getEmail(), request.getName(), "TestTken!@#!@ASDASD");
@@ -146,10 +146,12 @@ public class UserApiLogic {
         if (user.isActivated()) {
             throw UserException.alreadyActivated();
         }
+        //reset activation token's expire date
         Date expireDate = setTokenExpireDate();
         user.setActivateToken(SecurityUtil.generateToken());
         user.setTokenExpire(expireDate);
         userService.update(user);
+        //resend activation email
         sendEmail(user);
     }
 

@@ -45,7 +45,7 @@ public class TokenFilter extends GenericFilter {
 
         //extract token
         String token = authorization.substring(7); //"Bearer " = 7letters
-        //verify token
+        //verify and decode token
         DecodedJWT decodedJWT = tokenService.isValid(token);
         if(decodedJWT == null){
             filterChain.doFilter(servletRequest, servletResponse);

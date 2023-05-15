@@ -1,6 +1,6 @@
 package com.example.demo.logic;
 
-import com.example.demo.common.EmailRequest;
+import com.example.common.EmailRequest;
 import com.example.demo.exception.EmailException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.kafka.core.KafkaTemplate;

@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors(config -> {
+                    //cross origin resource configuration
                     CorsConfiguration cors = new CorsConfiguration();
                     cors.setAllowCredentials(true);
                     cors.setAllowedOriginPatterns(Collections.singletonList("http://*"));
