@@ -1,6 +1,6 @@
 # demo
 -------------------------------------------------------------------
-My studying project for Spring Boot
+My studying project for Spring Boot following an online course
 -------------------------------------------------------------------
 
 This is an experiment on creating backend API using Java Spring Boot, PosgreSQL, Redis, and Kafka.
