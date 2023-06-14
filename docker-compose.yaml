@@ -1,0 +1,9 @@
+version: '2'
+services:
+  demoapp:
+    container_name: demoapp
+    image: demoapp:latest
+    env_file:
+      - .env
+    ports:
+      - 8080:8080

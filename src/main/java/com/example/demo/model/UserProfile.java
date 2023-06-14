@@ -3,11 +3,9 @@ package com.example.demo.model;
 import lombok.Data;
 
 @Data
-public class RegisterRequest
-{
+public class UserProfile {
     private String name;
     private String email;
-    private String password;
 
 }
 

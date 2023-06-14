@@ -1,14 +1,11 @@
 package com.example.demo.api;
 
-import com.example.demo.Entity.User;
 import com.example.demo.exception.BaseException;
+import com.example.demo.exception.EmailException;
 import com.example.demo.exception.FileException;
 import com.example.demo.exception.UserException;
 import com.example.demo.logic.UserApiLogic;
-import com.example.demo.model.LoginRequest;
-import com.example.demo.model.RegisterRequest;
-import com.example.demo.model.RegisterResponse;
-import com.example.demo.model.TestResponse;
+import com.example.demo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,27 +21,56 @@ public class UserApi {
 	private UserApiLogic logic; // intantly give reusable instance of UserApiLogic class without creating new instance
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody LoginRequest request)throws BaseException {
+	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws BaseException {
 		return ResponseEntity.ok(logic.login(request));
 	}
-	@GetMapping
-	public TestResponse test() {
-		TestResponse response = new TestResponse();
-		response.setName("AAA");
-		response.setFood("BBB");
-		return response;
-	}
+
 	@PostMapping("/register")
-	public ResponseEntity<RegisterResponse>  register(@RequestBody RegisterRequest request) throws UserException {
+	public ResponseEntity<RegisterResponse>  register(@RequestBody RegisterRequest request) throws UserException, EmailException {
 
 		RegisterResponse response = logic.register(request);
 		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("/upload")
-	public ResponseEntity<String> uploadProfilePicture(@RequestPart MultipartFile file)throws FileException {
+	public ResponseEntity<String> uploadProfilePicture(@RequestPart MultipartFile file) throws FileException {
 		String response = logic.uploadProfilePicture(file);
 		return ResponseEntity.ok(response);
 	}
 
+	@GetMapping("/profile")
+	public ResponseEntity<UserProfile> getUserProfile() throws BaseException {
+		UserProfile response = logic.getUserProfile();
+		return ResponseEntity.ok(response);
+	}
+
+	@PutMapping("/profile")
+	public ResponseEntity<UserProfile> updateUserProfile(@RequestBody UpdateUserProfileRequest request) throws BaseException {
+		UserProfile response = logic.updateUserProfile(request);
+		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/activate")
+	public ResponseEntity<ActivateResponse> activateUser(@RequestBody ActivateRequest request) throws BaseException {
+		ActivateResponse response = logic.activate(request);
+		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/reactivate")
+	public ResponseEntity<Void> reactivateUser(@RequestBody ReactivationRequest request) throws BaseException {
+		logic.reactivate(request);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+
+	@GetMapping("/refresh-token")
+	public ResponseEntity<String> refreshToken() throws BaseException {
+		String response = logic.refreshToken();
+		return ResponseEntity.ok(response);
+	}
+
+//	@DeleteMapping("/delete")
+//	public ResponseEntity<Void> deleteMyAccount() throws UserException {
+//		logic.deleteMyAccount();
+//		return ResponseEntity.ok().build();
+//	}
 }
